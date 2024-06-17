@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favourite Universities</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Favourite Universities</h1>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>State/Province</th>
+          <th>Web Pages</th>
+        </tr>
+      </thead>
+      <tbody id="favourite-table">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    async function fetchFavourites() {
+      const response = await fetch('/api/favourites');
+      const favourites = await response.json();
+      const tableBody = document.getElementById('favourite-table');
+
+      tableBody.innerHTML = '';
+
+      favourites.forEach(favourite => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${favourite.name}</td>
+          <td>${favourite.state_province || ''}</td>
+          <td><a href="${favourite.web_pages}" target="_blank">${favourite.web_pages}</a></td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchFavourites);
+  </script>
+</body>
+</html>
